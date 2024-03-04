@@ -16,10 +16,10 @@ library(nadiv)
 library(MCMCglmm)
 
 # Loading phenotypic data
-data <- read.table("social_ageing_data.txt", header=TRUE)
+Data <- read.table("social_ageing_data.txt", header=TRUE)
 
 #Response variable
-data$N.NB<-as.numeric(data$Data$n.neigbors.4w.ahead.2m) #social data, number of NB in a 2m radious
+Data$N.NB<-as.numeric(Data$n.neigbors.4w.ahead.2m) #social data, number of NB in a 2m radious
 
 #Random effects
 Data$ID=as.factor(Data$ID)  
@@ -50,9 +50,7 @@ Data=df2
 
 #Specifying heterogeneous residuals
 nblocks5 <-5	# number of 'residual blocks'
-
 Data$envclass5 <- as.numeric(arules::discretize(Data$year,breaks= nblocks5, method='frequency'))
-table(Data$envclass5)
 Data$envclass5=as.factor(Data$envclass5)
 
 # Setting number of samples and iterations
@@ -72,7 +70,7 @@ mod<-MCMCglmm(N.NB~IDmeanAge*AgeSD+yearZ+colony.sizeZ,
                rcov= ~idh(envclass5):units,    
                data=Data,family="poisson",
                nitt = NITT, thin = THIN, burnin = BURN,
-               prior=prior,verbose=TRUE, pr=TRUE)
+               prior=prior,verbose=TRUE, pr=FALSE)
 
 #save(mod, file = "Individual.RR.analysis_N.NB.rda")
 #load("Individual.RR.analysis_N.NB.rda")
