@@ -4,7 +4,6 @@
 
 # The code provided here is sufficient to replicate the results presented in the above paper
 
-
 ######################################################
 # DATA ANALYSIS OF GENETIC VARIATION IN THE CHANGE OF NUMBER OF NB ALONG AN AGE GRADIENT
 ######################################################
@@ -17,10 +16,10 @@ library(nadiv)
 library(MCMCglmm)
 
 # Loading phenotypic data
-data <- read.table("social_ageing_data.txt", header=TRUE)
+Data <- read.table("social_ageing_data.txt", header=TRUE)
 
 #Response variable
-data$N.NB<-as.numeric(data$Data$n.neigbors.4w.ahead.2m) #social data, number of NB in a 2m radious
+Data$N.NB<-as.numeric(Data$n.neigbors.4w.ahead.2m) #social data, number of NB in a 2m radious
 
 #Random effects
 Data$ID=as.factor(Data$ID)  
@@ -51,14 +50,12 @@ Data=df2
 
 # Loading pedigree
 pedigree <- read.table("pedigree.txt",header=TRUE)
-ped=prunePed(pedigree, Data$animal, make.base=TRUE)  #to prune the pedigree, i.e., only keep those records on the pedigree that have phenotypic information for our analyses
+ped=prunePed(pedigree, Data$animal, make.base=TRUE)
 my_inverse <- inverseA(ped)$Ainv
 
 #Specifying heterogeneous residuals
 nblocks5 <-5	# number of 'residual blocks'
-
 Data$envclass5 <- as.numeric(arules::discretize(Data$year,breaks= nblocks5, method='frequency'))
-table(Data$envclass5)
 Data$envclass5=as.factor(Data$envclass5)
 
 # Setting number of samples and iterations
@@ -129,12 +126,10 @@ allranef <- list(mod$VCV[,"(Intercept):(Intercept).animal"],
                  mod$VCV[,"AGE:AGE.animal"],
                  mod$VCV[,"AGE:(Intercept).animal"],
                  mod$VCV[, 2]/sqrt(mod$VCV[, 1] * mod$VCV[, 4]),
-                 
                  mod$VCV[,"(Intercept):(Intercept).ID"],
                  mod$VCV[,"AGE:AGE.ID"],
                  mod$VCV[,"AGE:(Intercept).ID"],
                  mod$VCV[, 6]/sqrt(mod$VCV[, 5] * mod$VCV[, 8]),
-                 
                  mod$VCV[,"YEAR"],
                  mod$VCV[,"ISLE"],
                  mod$VCV[,"envclass51.units"],
@@ -142,7 +137,6 @@ allranef <- list(mod$VCV[,"(Intercept):(Intercept).animal"],
                  mod$VCV[,"envclass53.units"],
                  mod$VCV[,"envclass54.units"],
                  mod$VCV[,"envclass55.units"])
-
 
 predm0_bdate <- predict(mod, marginal=mod$Random$formula,
                         posterior = "all")
@@ -158,8 +152,6 @@ tabranef <- data.frame(mode=round(unlist(lapply(allranef, posterior.mode)),3),
                                      "Vpe Intercepts","Vpe Slope", "Vpe Covariance", "Vpe Correlation",
                                      "Year","Island ID",#"residuals"))
                                      "Residuals1","Residuals2","Residuals3","Residuals4","Residuals5"))
-
-
 tabranef 
 
 # Figure 3
