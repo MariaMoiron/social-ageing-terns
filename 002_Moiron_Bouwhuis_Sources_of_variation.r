@@ -1,4 +1,4 @@
-# Code for "Age-dependent shaping of the social environment in a longlived seabird – a quantitative genetic approach"
+# Code for "Age-dependent shaping of the social environment in a long-lived seabird – a quantitative genetic approach"
 # Unpublished manuscript, doi: tba
 # Moiron M, Bouwhuis S
 
@@ -16,10 +16,10 @@ library(nadiv)
 library(MCMCglmm)
 
 # Loading phenotypic data
-data <- read.table("social_ageing_data.txt", header=TRUE)
+Data <- read.table("social_ageing_data.txt", header=TRUE)
 
 #Response variable
-data$N.NB<-as.numeric(data$Data$n.neigbors.4w.ahead.2m) #social data, number of NB in a 2m radious
+Data$N.NB<-as.numeric(Data$n.neigbors.4w.ahead.2m) #social data, number of NB in a 2m radious
 
 #Plot distribution of data (Figure 1A)
 hist(Data$N.NB, xlab="Number of neighbours", main="", breaks=50)
@@ -52,7 +52,7 @@ Data=df2
 
 # Loading pedigree
 pedigree <- read.table("pedigree.txt",header=TRUE)
-ped=prunePed(pedigree, Data$animal, make.base=TRUE)  #to prune the pedigree, i.e., only keep those records on the pedigree that have phenotypic information for our analyses
+ped=prunePed(pedigree, Data$animal, make.base=TRUE)
 my_inverse <- inverseA(ped)$Ainv
 
 # Setting number of samples and iterations
