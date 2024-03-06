@@ -73,8 +73,7 @@ mod<-MCMCglmm(DD~IDmeanAge*AgeSD+yearZ+colony.sizeZ,
                ginverse=list(animal = my_inverse),
                nitt = NITT, thin = THIN, burnin = BURN,
                prior=prior, 
-               verbose=TRUE,pr=FALSE
-)
+               verbose=TRUE,pr=FALSE)
 
 #save(mod, file = "analysis_N.NB.rda")
 #load("analysis_N.NB.rda")
@@ -93,22 +92,19 @@ posterior.mode(mod$Sol)
 HPDinterval(mod$Sol)
 plot(mod$Sol)
 
-dif = mod$Sol[,"IDmeanAge"] - mod$Sol[,"AgeSD"]
-posterior.mode(dif)
-HPDinterval(dif)
-
 #Table of Fixed effects
 allfixef <- list(mod$Sol[,"(Intercept)"],
                  mod$Sol[,"IDmeanAge"],
                  mod$Sol[,"AgeSD"],
                  mod$Sol[,"IDmeanAge:AgeSD"],
                  mod$Sol[,"yearZ"],
-                 mod$Sol[,"colony.sizeZ"]
+                 mod$Sol[,"colony.sizeZ"],
+                 mod$Sol[,"IDmeanAge"] - mod$Sol[,"AgeSD"]
 )
 
 tabfixef <- data.frame(param = c("Intercept","Mean Age", "Delta Age",
                                  "Mean age * Delta age",
-                                 "Year","colony size"),
+                                 "Year","colony size", "average-delta diff"),
                        mode=round(unlist(lapply(allfixef, posterior.mode)),3),
                        median=unlist(lapply(allfixef, function(x){
                          paste0("(",round(median(x),3),")")})),
@@ -132,19 +128,15 @@ allranef <- list(modG$VCV[,"animal"],
                  modG$VCV[,"animal"]/rowSums(modG$VCV),
                  100*sqrt(modG$VCV [ , "animal"]) / (mean(Data$DD)))
 
-predm0_bdate <- predict(modG, marginal=modG$Random$formula,
-                        posterior = "all")
+predm0_bdate <- predict(modG, marginal=modG$Random$formula,posterior = "all")
 
 tabranef <- data.frame(mode=round(unlist(lapply(allranef, posterior.mode)),3),
-                       median=unlist(lapply(allranef, function(x){
-                         paste0("(",round(median(x),3),")")})),
+                       median=unlist(lapply(allranef, function(x){paste0("(",round(median(x),3),")")})),
                        CI=unlist(lapply(allranef, function(x){
                          paste0("[",round(HPDinterval(x)[1], 3), ", ",
                                 round(HPDinterval(x)[2], 3), "]")})),
-                       
-                       row.names = c("Additive genetic", "Permanent environment",
-                                     "Year", "Island", "Residual","Repeatability", "Heritability", "Evolvability"))
-
+                       row.names = c("Additive genetic", "Permanent environment","Year", "Island", "Residual",
+                                     "Repeatability", "Heritability", "Evolvability"))
 
 tabranef
 
