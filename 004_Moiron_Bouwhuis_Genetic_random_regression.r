@@ -2,8 +2,6 @@
 # Unpublished manuscript, doi: tba
 # Moiron M, Bouwhuis S
 
-# The code provided here is sufficient to replicate the results presented in the above paper
-
 ######################################################
 # DATA ANALYSIS OF GENETIC VARIATION IN THE CHANGE OF NUMBER OF NB ALONG AN AGE GRADIENT
 ######################################################
@@ -76,8 +74,8 @@ mod<-MCMCglmm(N.NB~IDmeanAge*AgeSD+yearZ+colony.sizeZ,
               rcov= ~idh(envclass5):units, 
               data=Data,family="poisson",
               ginverse=list(animal = my_inverse),
-               nitt = NITT, thin = THIN, burnin = BURN,
-               prior=prior,verbose=TRUE, pr=TRUE)
+              nitt = NITT, thin = THIN, burnin = BURN,
+              prior=prior,verbose=TRUE, pr=TRUE)
 
 #save(mod, file = "Genetic.RR.analysis_N.NB.rda")
 #load("Genetic.RR.analysis_N.NB.rda")
@@ -102,8 +100,7 @@ allfixef <- list(mod$Sol[,"(Intercept)"],
                  mod$Sol[,"AgeSD"],
                  mod$Sol[,"IDmeanAge:AgeSD"],
                  mod$Sol[,"yearZ"],
-                 mod$Sol[,"colony.sizeZ"]
-)
+                 mod$Sol[,"colony.sizeZ"])
 
 tabfixef <- data.frame(param = c("Intercept","Mean Age", "Delta Age",
                                  "Mean age * Delta age",
@@ -155,13 +152,12 @@ tabranef <- data.frame(mode=round(unlist(lapply(allranef, posterior.mode)),3),
 tabranef 
 
 # Figure 3
-df_rr_ind <- cbind(Data,
-                   fit = predict(modG, marginal = NULL)) %>%
+df_rr_ind <- cbind(Data, fit = predict(modG, marginal = NULL)) %>%
   group_by(animal,AGE) %>%
   summarise(fit = mean(fit))
 
 # Plot predictions and overlay original data points
-ye <- rgb(0.128,0.128,0.128,0.5)
+ye <- rgb(0.128,0.128,0.128,0.5) #set colour
 
 plot=ggplot(df_rr_ind, aes(x =AGE, y = fit)) +
   geom_jitter(data = Data,width = 0.01,
@@ -170,8 +166,8 @@ plot=ggplot(df_rr_ind, aes(x =AGE, y = fit)) +
   scale_x_continuous(breaks = c(-1, 0,1,2,3, 4))+
   scale_y_continuous(breaks = c(0,10,20,30))+
   geom_smooth(aes(y = fit,group=animal,color=animal),
-              method=lm,formula = y ~x,   # Add linear regression lines
-              se=FALSE,    # Don't add shaded confidence region
+              method=lm,formula = y ~x,
+              se=FALSE, 
               fullrange=FALSE, alpha=0.1)+
   scale_color_viridis_d(option = "magma")
 
