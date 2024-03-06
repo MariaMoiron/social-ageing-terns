@@ -2,8 +2,6 @@
 # Unpublished manuscript, doi: tba
 # Moiron M, Bouwhuis S
 
-# The code provided here is sufficient to replicate the results presented in the above paper
-
 ######################################################
 # DATA ANALYSIS OF SOURCES OF VARIATION IN THE NUMBER OF NB
 ######################################################
