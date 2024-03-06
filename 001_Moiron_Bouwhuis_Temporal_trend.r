@@ -2,8 +2,6 @@
 # Unpublished manuscript, doi: tba
 # Moiron M, Bouwhuis S
 
-# The code provided here is sufficient to replicate the results presented in the above paper
-
 ######################################################
 # DATA ANALYSIS OF TEMPORAL TREND IN NUMBER OF NB
 ######################################################
@@ -22,6 +20,7 @@ data$N.NB<-as.numeric(data$n.neigbors.4w.ahead.2m) #social data, number of NB in
 #Covariate
 data$year = as.numeric(data$year)  
 
+#Get statististics
 Yrs<-min(Data$year):max(Data$year)
 trait.means<-tapply(Data$N.NB,Data$year,mean,na.rm=T)
 standard_error <- function(x) sd(x) / sqrt(length(x))
