@@ -2,8 +2,6 @@
 # Unpublished manuscript, doi: tba
 # Moiron M, Bouwhuis S
 
-# The code provided here is sufficient to replicate the results presented in the above paper
-
 ######################################################
 #DATA ANALYSIS OF INDIVIDUAL VARIATION IN THE CHANGE OF NUMBER OF NB ALONG AN AGE GRADIENT
 ######################################################
@@ -128,16 +126,13 @@ allranef <- list(
   mod$VCV[,"envclass54.units"],
   mod$VCV[,"envclass55.units"])
 
-predm0_bdate <- predict(mod, marginal=mod$Random$formula,
-                        posterior = "all")
+predm0_bdate <- predict(mod, marginal=mod$Random$formula,posterior = "all")
 
 tabranef <- data.frame(mode=round(unlist(lapply(allranef, posterior.mode)),3),
-                       median=unlist(lapply(allranef, function(x){
-                         paste0("(",round(median(x),3),")")})),
+                       median=unlist(lapply(allranef, function(x){paste0("(",round(median(x),3),")")})),
                        CI=unlist(lapply(allranef, function(x){
                          paste0("[",round(HPDinterval(x)[1], 3), ", ",
                                 round(HPDinterval(x)[2], 3), "]")})),
-                       
                        row.names = c("Va Intercepts","Va Slope", "Va Covariance", "Va Correlation",
                                      "Year","Island ID",
                                      "Residuals1","Residuals2","Residuals3","Residuals4","Residuals5"))
