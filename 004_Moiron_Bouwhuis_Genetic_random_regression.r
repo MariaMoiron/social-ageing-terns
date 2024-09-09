@@ -1,5 +1,5 @@
 # Code for "Age-dependent shaping of the social environment in a longlived seabird – a quantitative genetic approach"
-# Unpublished manuscript, doi: tba
+# Unpublished manuscript, doi: 10.1098/rstb.2022.0465
 # Moiron M, Bouwhuis S
 
 ######################################################
